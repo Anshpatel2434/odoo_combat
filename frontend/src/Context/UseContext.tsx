@@ -60,7 +60,7 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("Ansh Patel");
+  const [username, setUsername] = useState<string>("");
   const [dropdown, setDropdown] = useState<boolean>(false);
   const [logUser, setLogUser] = useState<User>({
     name: "",

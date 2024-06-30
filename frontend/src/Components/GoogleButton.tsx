@@ -29,20 +29,29 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
       const res = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, signup);
       const data = res.data;
       if (data.status == 200) {
-        googleLogout();
-
         setLogUser({
           name: signup.name,
           email: signup.email,
         });
         localStorage.setItem("token", data.message);
         setUsername(data.name);
-        navigate("/setpassword");
         setLoggedIn(true);
+        console.log("inside signup");
         localStorage.setItem("loggedIn", "" + true);
+        navigate("/setpassword");
       } else if (data.status == 403) {
+        setLoggedIn(true);
         localStorage.setItem("token", data.message);
+        localStorage.setItem("loggedIn", "" + true);
+        console.log(
+          "in the signup but in status 403 and the username is : ",
+          data.name
+        );
         setUsername(data.name);
+        setLogUser({
+          name: signup.name,
+          email: signup.email,
+        });
         navigate("/");
       }
     } catch (error) {
@@ -63,6 +72,11 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
       if (data.status == 200) {
         setLoggedIn(true);
         setUsername(data.name);
+        setLogUser({
+          email: email,
+          name: data.name,
+        });
+        console.log("inside login input /signingoogle");
         localStorage.setItem("loggedIn", "" + true);
         localStorage.setItem("token", data.message);
         navigate("/");
@@ -79,7 +93,10 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
       const { error, error_description, error_uri, ...userWithoutErrors } =
         tokenResponse;
       setUser(userWithoutErrors as User);
-      console.log(userWithoutErrors);
+      console.log(
+        "user signed in with google but credentials yet to get",
+        userWithoutErrors
+      );
     },
     onError: (error) => console.log("Login failed: ", error),
   });

@@ -35,6 +35,7 @@ const AskPassword: React.FC = () => {
       if (data.status == 200) {
         setLoggedIn(true);
         setUsername(data.name);
+        localStorage.setItem("loggedIn", "" + true);
         navigate("/");
       } else alert(data.message);
     } catch (error) {

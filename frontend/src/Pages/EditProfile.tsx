@@ -20,21 +20,30 @@ const EditProfile = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   async function sendRequest() {
-    console.log(profile);
+    console.log(
+      "in the edit profile send request method and the jwt is : ",
+      localStorage.getItem("token")
+    );
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/v1/profile/add`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      });
-      console.log("res data" + res.data);
+      const res = await axios.post(
+        `${BACKEND_URL}/api/v1/profile/add`,
+        profile,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log("res data");
+      console.log(res.data);
+      navigate("/");
     } catch (e) {
       alert("Error while login in");
     }
   }
 
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
-    console.log(profile);
+    console.log("inside the edit profile and this is the profile", profile);
     e.preventDefault();
     sendRequest();
   }

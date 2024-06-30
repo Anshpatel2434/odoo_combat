@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 // }
 
 const DropDown = () => {
-  const { username } = useContext(AppContext) as Context;
+  const { username, setLoggedIn } = useContext(AppContext) as Context;
   const navigate = useNavigate();
 
   return (
@@ -35,24 +35,28 @@ const DropDown = () => {
             </div>
             <hr />
 
-            <a
-              href="/userInfo"
+            <div
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
+              onClick={() => {
+                navigate("/userInfo");
+              }}
             >
               <CgProfile size={30} />
               <p>My Profile</p>
               <span>{">"}</span>
-            </a>
-            <a
-              href="/editProfile"
+            </div>
+
+            <div
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
+              onClick={() => {
+                navigate("/editProfile");
+              }}
             >
               <FaUserEdit size={30} />
               <p>Edit Profile</p>
               <span>{">"}</span>
-            </a>
-            <a
-              href=""
+            </div>
+            <div
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
               onClick={() => {
                 navigate("/addFurniture");
@@ -61,30 +65,33 @@ const DropDown = () => {
               <RiArmchairFill size={30} />
               <p>Rent Your Furniture</p>
               <span>{">"}</span>
-            </a>
-            <a
-              href="#"
+            </div>
+            <div
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
+              onClick={() => {
+                navigate("/");
+              }}
             >
               <CgNotes size={30} />
               <p>My Orders</p>
               <span>{">"}</span>
-            </a>
+            </div>
 
             <div className="w-full h-[1px] bg-[#c0c0c0]"></div>
 
-            <a
-              href=""
+            <div
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
               onClick={() => {
                 navigate("/");
+                setLoggedIn(false);
+                window.location.reload();
                 localStorage.setItem("token", "");
                 localStorage.setItem("loggedIn", "" + false);
               }}
             >
               <MdLogout size={30} />
               <p className="text-red-600">Logout</p>
-            </a>
+            </div>
           </div>
         </div>
       </nav>

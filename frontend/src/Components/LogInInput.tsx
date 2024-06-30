@@ -8,7 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "./GoogleButton";
 
 const LogInInput = () => {
-  const { setLoggedIn, setUsername } = useContext(AppContext) as Context;
+  const { setLoggedIn, setUsername, setLogUser } = useContext(
+    AppContext
+  ) as Context;
   const navigate = useNavigate();
   const [postInputs, setPostInputs] = useState({
     email: "",
@@ -23,16 +25,16 @@ const LogInInput = () => {
         `${BACKEND_URL}/api/v1/user/signin`,
         postInputs
       );
-      setPostInputs({
-        email: "",
-        password: "",
-      });
       const data = res.data;
       if (data.status == 200) {
         console.log("in login :", res.data);
         localStorage.setItem("token", data.token);
         setLoggedIn(true);
         localStorage.setItem("loggedIn", "" + true);
+        setLogUser({
+          email: postInputs.email,
+          name: data.name,
+        });
         setUsername(data.name);
         navigate("/");
       } else alert(data.message);

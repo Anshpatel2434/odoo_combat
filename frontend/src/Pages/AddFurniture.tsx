@@ -10,7 +10,8 @@ import { AppContext, Context } from "../Context/UseContext";
 const AddFurniture = () => {
   const [showChildCards, setshowChildCards] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { loggedIn } = useContext(AppContext) as Context;
+  const { username } = useContext(AppContext) as Context;
+  console.log("the value of the username in the add furniture: ", username);
 
   return (
     <div className="flex flex-col overflow-x-hidden relative min-h-screen bg-slate-600">

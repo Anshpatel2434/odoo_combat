@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
-import { boolean } from "zod";
-import TagCard from "./TagCard";
 
 const EditFurnitureCard = () => {
   return (

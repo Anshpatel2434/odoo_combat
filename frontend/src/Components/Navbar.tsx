@@ -9,11 +9,10 @@ import { IoSearch } from "react-icons/io5";
 import { IoCartOutline } from "react-icons/io5";
 import DropDown from "./DropDown";
 
-const Photo = (
-  username: string,
-  dropdown: boolean,
-  setDropdown: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+const Photo = () => {
+  const { username, dropdown, setDropdown, logUser } = useContext(
+    AppContext
+  ) as Context;
   return (
     <button
       onClick={() => {
@@ -22,7 +21,7 @@ const Photo = (
       className="flex justify-center gap-2 items-center"
     >
       <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white">
-        {username[0].toUpperCase()}
+        {logUser.name[0].toUpperCase()}
       </div>
       <TiArrowSortedDown size={25} />
     </button>
@@ -62,12 +61,14 @@ const Navbar = () => {
     <div className="relative">
       {dropdown ? <DropDown /> : null}
       <div className="bg-white w-screen border-b-black fixed z-10 shadow-lg h-[4rem] md:h-[5rem] flex justify-between ">
-        <a
-          href=""
+        <div
           className="md:border max-w-[12rem] h-full md:flex-shrink-0 flex items-center justify-center md:px-4 lg:px-6 xl:px-8"
+          onClick={() => {
+            navigate("/");
+          }}
         >
           <span className="text-xl font-bold">FurtinureSphere</span>
-        </a>
+        </div>
         <div className="md:hidden border w-[4rem] flex items-center justify-center">
           <a>
             <GiHamburgerMenu />
@@ -105,7 +106,7 @@ const Navbar = () => {
 
         <div className="border  items-center px-4 lg:px-6 hidden md:flex xl:px-8 gap-6">
           {loggedInl ? (
-            Photo(username, dropdown, setDropdown)
+            Photo()
           ) : (
             <>
               <button
