@@ -29,9 +29,10 @@ const LogInInput = () => {
       });
       const data = res.data;
       if (data.status == 200) {
-        console.log(res.data);
+        console.log("in login :", res.data);
         localStorage.setItem("token", data.token);
         setLoggedIn(true);
+        localStorage.setItem("loggedIn", "" + true);
         setUsername(data.name);
         navigate("/");
       } else alert(data.message);

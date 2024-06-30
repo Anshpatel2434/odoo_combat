@@ -12,6 +12,8 @@ const EditFurnitureCard = () => {
       <Card />
       <Card />
       <Card />
+      <Card />
+      <Card />
     </div>
   );
 };

@@ -8,7 +8,7 @@ const Hero = () => {
         <div className="container mx-auto h-full sm:p-10">
           <nav className="flex px-4 justify-between items-center">
             <div className="text-4xl font-bold mt-6">
-              DallaSphere<span className="text-blue-700">.</span>
+              FurnitureSphere<span className="text-blue-700">.</span>
             </div>
           </nav>
           <header className="container px-4 lg:flex mt-2 items-center h-full lg:mt-0">

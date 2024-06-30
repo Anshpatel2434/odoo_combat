@@ -36,6 +36,7 @@ const SignUpInput = () => {
       if (data.status == 200) {
         localStorage.setItem("token", data.message);
         setLoggedIn(true);
+        localStorage.setItem("loggedIn", "" + true);
         setUsername(data.name);
         navigate("/");
       } else if (data.status == 403) {

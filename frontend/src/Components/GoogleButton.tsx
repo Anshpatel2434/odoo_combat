@@ -15,7 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 type User = Omit<TokenResponse, "error" | "error_description" | "error_uri">;
 
 const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
-  const { setLoggedIn, setUsername, setLogUser } = useContext(
+  const { loggedIn, setLoggedIn, setUsername, setLogUser } = useContext(
     AppContext
   ) as Context;
   const navigate = useNavigate();
@@ -38,9 +38,9 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
         localStorage.setItem("token", data.message);
         setUsername(data.name);
         navigate("/setpassword");
-      } else if (data.status == 403) {
         setLoggedIn(true);
-        googleLogout();
+        localStorage.setItem("loggedIn", "" + true);
+      } else if (data.status == 403) {
         localStorage.setItem("token", data.message);
         setUsername(data.name);
         navigate("/");
@@ -61,8 +61,9 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
       );
       const data = res.data;
       if (data.status == 200) {
-        googleLogout();
         setLoggedIn(true);
+        setUsername(data.name);
+        localStorage.setItem("loggedIn", "" + true);
         localStorage.setItem("token", data.message);
         navigate("/");
       } else alert(data.message);

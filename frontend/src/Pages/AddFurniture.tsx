@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EditFurnitureCard from "../Components/EditFurnitureCard";
 import Navbar from "../Components/Navbar";
 import { MdAddBusiness } from "react-icons/md";
 import TagCard from "../Components/TagCard";
 import image from "../assets/chair.jpg";
 import { useNavigate } from "react-router-dom";
+import { AppContext, Context } from "../Context/UseContext";
 
 const AddFurniture = () => {
   const [showChildCards, setshowChildCards] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { loggedIn } = useContext(AppContext) as Context;
 
   return (
     <div className="flex flex-col overflow-x-hidden relative min-h-screen bg-slate-600">

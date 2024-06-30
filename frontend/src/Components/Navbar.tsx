@@ -36,6 +36,10 @@ const Navbar = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
+  const [loggedInl, setLoggedInl] = useState(() => {
+    return localStorage.getItem("loggedIn") === "true";
+  });
+
   function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key == "Enter") {
       Search(search);
@@ -62,7 +66,7 @@ const Navbar = () => {
           href=""
           className="md:border max-w-[12rem] h-full md:flex-shrink-0 flex items-center justify-center md:px-4 lg:px-6 xl:px-8"
         >
-          <span className="text-xl font-bold">DallaSphere</span>
+          <span className="text-xl font-bold">FurtinureSphere</span>
         </a>
         <div className="md:hidden border w-[4rem] flex items-center justify-center">
           <a>
@@ -100,7 +104,7 @@ const Navbar = () => {
         </nav>
 
         <div className="border  items-center px-4 lg:px-6 hidden md:flex xl:px-8 gap-6">
-          {loggedIn ? (
+          {loggedInl ? (
             Photo(username, dropdown, setDropdown)
           ) : (
             <>

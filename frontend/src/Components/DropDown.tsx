@@ -52,8 +52,11 @@ const DropDown = () => {
               <span>{">"}</span>
             </a>
             <a
-              href="/addFurniture"
+              href=""
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
+              onClick={() => {
+                navigate("/addFurniture");
+              }}
             >
               <RiArmchairFill size={30} />
               <p>Rent Your Furniture</p>
@@ -71,8 +74,13 @@ const DropDown = () => {
             <div className="w-full h-[1px] bg-[#c0c0c0]"></div>
 
             <a
-              href="#"
+              href=""
               className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
+              onClick={() => {
+                navigate("/");
+                localStorage.setItem("token", "");
+                localStorage.setItem("loggedIn", "" + false);
+              }}
             >
               <MdLogout size={30} />
               <p className="text-red-600">Logout</p>
