@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../Context/UseContext";
 import { Context } from "../Context/UseContext";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleButton from "./GoogleButton";
 
@@ -25,8 +25,7 @@ const LogInInput = () => {
         postInputs
       );
       const data = res.data;
-      if (data.status == 200) {
-        console.log("in login :", res.data);
+      if (data.status === 200) {
         localStorage.setItem("token", data.message);
         setLoggedIn(true);
         setLogUser({
@@ -35,62 +34,54 @@ const LogInInput = () => {
         });
         setUsername(data.name);
         navigate("/");
-      } else alert(data.message);
+      } else {
+        alert(data.message);
+      }
     } catch (e) {
-      alert("Error while login in");
+      alert("Error while logging in");
     }
   }
 
   return (
-    <div className="h-screen flex justify-center flex-col">
-      <div className="flex justify-center">
+    <div className="h-screen flex justify-center items-center bg-gray-900 text-white">
+      <div className="max-w-md w-full mx-auto px-4">
+        <div className="text-3xl font-extrabold mb-4 text-center">
+          Log In to FurnitureSphere
+        </div>
+        <div className="text-gray-400 text-center mb-6">
+          Don't have an account?{" "}
+          <Link className="underline text-blue-400" to="/signup">
+            Sign Up
+          </Link>
+        </div>
         <div>
-          <div className="px-10">
-            <div className="text-3xl font-extrabold mb-4">
-              LogIn to FurnitureSphere
-            </div>
-            <div className="text-slate-500 ml-6">
-              Don't have an account?
-              <Link className="pl-2 underline text-blue-600" to="/signup">
-                SignUp
-              </Link>
-            </div>
+          <LabelledInput
+            label="Email"
+            type="email"
+            placeholder="yash@gmail.com"
+            onChange={(e) =>
+              setPostInputs({ ...postInputs, email: e.target.value })
+            }
+          />
+          <LabelledInput
+            label="Password"
+            type="password"
+            placeholder="******"
+            onChange={(e) =>
+              setPostInputs({ ...postInputs, password: e.target.value })
+            }
+          />
+          <button
+            onClick={sendRequest}
+            type="button"
+            className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-lg px-6 py-3 transition duration-300 ease-in-out"
+          >
+            Log In
+          </button>
+          <div className="mt-6 text-center text-gray-400">
+            ------- OR -------
           </div>
-          <div className="pt-8">
-            <LabelledInput
-              label="Email"
-              type={"email"}
-              placeholder="yash@gmail.com"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  email: e.target.value,
-                });
-              }}
-            />
-            <LabelledInput
-              label="Password"
-              type={"password"}
-              placeholder="123456"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  password: e.target.value,
-                });
-              }}
-            />
-            <button
-              onClick={sendRequest}
-              type="button"
-              className="mt-10 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-            >
-              Log In
-            </button>
-            <div className="mt-1 w-full text-gray-500 flex justify-center items-center bg-white  focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 text-lg">
-              ------- OR --------
-            </div>
-            <GoogleButton type="Login" />
-          </div>
+          <GoogleButton type="Login" />
         </div>
       </div>
     </div>
@@ -108,18 +99,21 @@ function LabelledInput({
   label,
   placeholder,
   onChange,
-  type,
+  type = "text",
 }: LabelledInputType) {
   return (
-    <div>
-      <label className="block mb-2 text-lg text-black font-semibold pt-4">
+    <div className="mb-4">
+      <label
+        className="block mb-2 text-lg text-white font-semibold"
+        htmlFor={label}
+      >
         {label}
       </label>
       <input
         onChange={onChange}
-        type={type || "text"}
-        id="first_name"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        type={type}
+        id={label.toLowerCase()}
+        className="w-full bg-gray-800 border border-gray-600 text-white text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 p-3 transition duration-300 ease-in-out"
         placeholder={placeholder}
         required
       />

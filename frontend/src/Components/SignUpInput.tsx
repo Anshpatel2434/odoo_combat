@@ -1,16 +1,9 @@
 import axios from "axios";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { AppContext } from "../Context/UseContext";
 import { Context } from "../Context/UseContext";
 import GoogleButton from "./GoogleButton";
-
-interface SignUpInput {
-  name: string;
-  email: string;
-  password: string;
-}
 
 const SignUpInput = () => {
   const { setLoggedIn, setUsername } = useContext(AppContext) as Context;
@@ -25,89 +18,79 @@ const SignUpInput = () => {
 
   async function sendRequest() {
     try {
-      //jwt add
       const res = await axios.post(
         `${BACKEND_URL}/api/v1/user/signup`,
         postInputs
       );
       setPostInputs({ name: "", email: "", password: "" });
       const data = res.data;
-      if (data.status == 200) {
+      if (data.status === 200) {
         localStorage.setItem("token", data.message);
         setLoggedIn(true);
         setUsername(data.name);
         navigate("/");
-      } else if (data.status == 403) {
+      } else if (data.status === 403) {
         setUsername(data.name);
-        alert("email already exists");
+        alert("Email already exists");
       }
     } catch (error) {
       alert("Error while signing up");
     }
   }
 
-  return (
-    <div className="h-screen flex justify-center flex-col">
-      <div className="flex justify-center">
-        <div>
-          <div className="px-10">
-            <div className="text-3xl font-extrabold mb-4">
-              Create a new account
-            </div>
-            <div className="text-slate-500 ml-6">
-              Already have an account?
-              <Link className="pl-2 underline text-blue-600" to="/login">
-                LogIn
-              </Link>
-            </div>
-          </div>
-          <div className="pt-8">
-            <LabelledInput
-              label="Name"
-              placeholder="Yash Mishra..."
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  name: e.target.value,
-                });
-              }}
-            />
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: "name" | "email" | "password"
+  ) => {
+    setPostInputs({
+      ...postInputs,
+      [field]: e.target.value,
+    });
+  };
 
-            <LabelledInput
-              label="Email"
-              type={"email"}
-              placeholder="yash@gmail.com"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  email: e.target.value,
-                });
-              }}
-            />
-            <LabelledInput
-              label="Password"
-              type={"password"}
-              placeholder="123456"
-              onChange={(e) => {
-                setPostInputs({
-                  ...postInputs,
-                  password: e.target.value,
-                });
-              }}
-            />
-            <button
-              onClick={sendRequest}
-              type="button"
-              className="mt-10 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-            >
-              Sign Up
-            </button>
-            <div className="mt-1 w-full text-gray-500 flex justify-center items-center bg-white  focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 text-lg">
-              ------- OR --------
-            </div>
-            <GoogleButton type="SignUp" />
-          </div>
+  return (
+    <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white">
+      <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md">
+        <div className="text-3xl font-extrabold mb-4 text-center text-gray-900">
+          Create a new account
         </div>
+        <div className="text-gray-500 text-center mb-6">
+          Already have an account?{" "}
+          <Link className="underline text-blue-600" to="/login">
+            Log In
+          </Link>
+        </div>
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <LabelledInput
+            label="Name"
+            placeholder="Your Name"
+            value={postInputs.name}
+            onChange={(e) => handleChange(e, "name")}
+          />
+          <LabelledInput
+            label="Email"
+            type="email"
+            placeholder="example@example.com"
+            value={postInputs.email}
+            onChange={(e) => handleChange(e, "email")}
+          />
+          <LabelledInput
+            label="Password"
+            type="password"
+            placeholder="********"
+            value={postInputs.password}
+            onChange={(e) => handleChange(e, "password")}
+          />
+          <button
+            onClick={sendRequest}
+            type="button"
+            className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition duration-300 ease-in-out"
+          >
+            Sign Up
+          </button>
+        </form>
+        <div className="mt-6 text-center text-gray-500">------- OR -------</div>
+        <GoogleButton type="SignUp" />
       </div>
     </div>
   );
@@ -116,6 +99,7 @@ const SignUpInput = () => {
 interface LabelledInputType {
   label: string;
   placeholder: string;
+  value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   type?: string;
 }
@@ -123,18 +107,20 @@ interface LabelledInputType {
 function LabelledInput({
   label,
   placeholder,
+  value,
   onChange,
-  type,
+  type = "text",
 }: LabelledInputType) {
   return (
     <div>
-      <label className="block mb-2 text-lg text-black font-semibold pt-4">
+      <label className="block mb-2 text-lg text-gray-900 font-semibold">
         {label}
       </label>
       <input
+        value={value}
         onChange={onChange}
-        type={type || "text"}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        type={type}
+        className="w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 px-4 py-3"
         placeholder={placeholder}
         required
       />

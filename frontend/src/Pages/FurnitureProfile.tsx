@@ -1,32 +1,13 @@
-import { useContext } from "react";
+import React, { useContext, ChangeEvent, FormEvent } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
-import "../styles.css";
 import Navbar from "../Components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { AppContext, Context } from "../Context/UseContext";
 import axios from "axios";
 
-interface Props {
-  option: string;
-  name: string;
-  description: string;
-  price: number;
-  quantity?: number;
-  address?: string;
-}
+interface FurnitureProfileProps {}
 
-let props: Props = {
-  option: "Edit",
-  name: "Sofa Cum Bed",
-  description: "Can Easily ACCOMODATE 5V PEOPLE",
-  price: 25,
-};
-
-function submitHandler(e: { preventDefault: () => void }) {
-  e.preventDefault();
-}
-
-const FurnitureProfile = () => {
+const FurnitureProfile: React.FC<FurnitureProfileProps> = () => {
   const navigate = useNavigate();
   const { rented, setRented } = useContext(AppContext) as Context;
 
@@ -34,90 +15,94 @@ const FurnitureProfile = () => {
 
   async function sendRequest() {
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, rented);
+      const res = await axios.post<{ id: string }>(
+        `${BACKEND_URL}/api/v1/user/signin`,
+        rented
+      );
       setRented({
         ...rented,
         id: res.data.id,
       });
+      // Navigate to the appropriate route after submission
+      navigate("/addFurniture");
     } catch (e) {
-      alert("Error while login in");
+      alert("Error while logging in");
     }
   }
 
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setRented((prevRented) => ({
+      ...prevRented,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    sendRequest();
+  };
+
   return (
-    <div className="flex flex-col overflow-x-hidden relative min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Navbar />
+
       <form
-        className="flex flex-col justify-center items-center w-[100%] font-serif tracking-widest mt-[5rem]"
-        onSubmit={submitHandler}
+        className="flex flex-col justify-center items-center w-full max-w-4xl mx-auto mt-12 md:mt-24 px-4"
+        onSubmit={handleSubmit}
       >
-        <p className="font-bold text-[2rem]">{`${props.option} Furniture`} </p>
-        <div className="w-[50%] px-10" id="outer">
-          <div>
-            <p className="text-[1.2rem] font-semibold mt-4 mb-2">
-              INCLUDE SOME DETALS
-            </p>
-            <div className="flex flex-col space-[-1rem] " id="br">
-              <p className="text-[1.1rem]">Furniture Title:</p>
+        <p className="font-bold text-2xl md:text-3xl mb-8">Edit Furniture</p>
+        <div className="w-full">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Furniture Title</label>
               <input
                 type="text"
-                className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-                onChange={(e) => {
-                  setRented({
-                    ...rented,
-                    title: e.target.value,
-                  });
-                }}
-              ></input>
-              <p className="py-[1.2rem]   text-[#6a6a6a]">
-                Mention the key features of your item(eg:brand , model name)
+                name="title"
+                value={rented.title}
+                onChange={handleInputChange}
+                className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              />
+              <p className="text-sm text-gray-400">
+                Mention the key features of your item (e.g., brand, model name)
               </p>
             </div>
 
-            <div className="flex flex-col space-[-1rem]" id="br">
-              <p className="text-[1.1rem]">Description:</p>
-
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Description</label>
               <textarea
-                className="border-dimgray-400 border-[2px] w-[70%] h-[5.3rem]"
-                onChange={(e) => {
-                  setRented({
-                    ...rented,
-                    description: e.target.value,
-                  });
-                }}
+                name="description"
+                value={rented.description}
+                onChange={handleInputChange}
+                className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full h-36 resize-none"
               ></textarea>
-              <p className="py-[1.2rem]  text-[#6a6a6a]  ">
-                Include condition, features and reason for selling
+              <p className="text-sm text-gray-400">
+                Include condition, features, and reason for selling
               </p>
             </div>
 
-            <div className="flex flex-col space-[-1rem]" id="br">
-              <p className="text-[1.1rem]">Set a Price :</p>
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Set a Price</label>
               <input
                 type="text"
-                className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-                onChange={(e) => {
-                  setRented({
-                    ...rented,
-                    price: Number(e.target.value),
-                  });
-                }}
-              ></input>
-              <p className="py-[1.2rem]  text-[#6a6a6a]">
+                name="price"
+                onChange={handleInputChange}
+                className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              />
+              <p className="text-sm text-gray-400">
                 Enter the price at which you wish to rent out
               </p>
             </div>
 
-            <div className="flex flex-col space-y-[-1rem] py-[1.2rem]" id="br">
-              <p className="text-[1.1rem]">Type of Furniture:</p>
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Type of Furniture</label>
               <select
-                className="border-dimgray-400 border-[2px] w-[70%] h-[3.4rem]"
-                onChange={(e) => {
-                  setRented({
-                    ...rented,
-                    type: e.target.value,
-                  });
-                }}
+                name="type"
+                value={rented.type}
+                onChange={handleInputChange}
+                className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
               >
                 <option value="">Select a type</option>
                 <option value="Sofa">Sofa</option>
@@ -138,60 +123,45 @@ const FurnitureProfile = () => {
               </select>
             </div>
 
-            <div className="flex flex-col space-[-1rem]" id="br">
-              <p className="text-[1.1rem]">Quantity:</p>
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Quantity</label>
               <input
                 type="text"
-                className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-                onChange={(e) => {
-                  setRented({
-                    ...rented,
-                    quantity: Number(e.target.value),
-                  });
-                }}
-              ></input>
-              <p className="py-[1.2rem]  text-[#6a6a6a]">
+                name="quantity"
+                onChange={handleInputChange}
+                className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              />
+              <p className="text-sm text-gray-400">
                 Enter the quantity of the product
               </p>
             </div>
 
-            <div className="flex flex-col space-[-1rem] pb-4" id="br">
-              <p className="text-[1.1rem]">Upload a Photo :</p>
-              <div
-                className="w-[5rem] h-[5rem] border-red-500 border flex justify-center items-center mt-[2rem]"
-                id="border"
-              >
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white border-black border-2 "
-                  htmlFor="img-upload"
-                >
-                  <MdOutlineAddAPhoto
-                    fill="black"
-                    className="py-[0.6rem]"
-                    size={44}
-                  />
-                </label>
-                <input
-                  type="file"
-                  className="border-dimgray-400 border-[2px] w-[90%]  h-[2.9rem] focus:border-green-500 focus:border-2 hidden "
-                  id="img-upload"
-                ></input>
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm">Upload a Photo</label>
+              <div className="flex items-center gap-2">
+                <div className="w-12 h-12 border-2 border-gray-400 flex justify-center items-center">
+                  <label
+                    htmlFor="img-upload"
+                    className="text-sm font-medium text-gray-900 dark:text-white border-black border-2 cursor-pointer flex items-center justify-center w-full h-full"
+                  >
+                    <MdOutlineAddAPhoto className="py-1" size={24} />
+                  </label>
+                  <input type="file" id="img-upload" className="hidden" />
+                </div>
+                <span className="text-sm text-gray-400">
+                  Upload a photo of the item
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col h-[8rem] justify-center" id="br">
-              <button
-                className="w-[12rem] h-[3rem] font-semibold text-[1rem] bg-blue-500 hover:cursor-pointer hover:bg-blue-600 "
-                type="submit"
-                value="submit"
-                onClick={() => {
-                  sendRequest();
-                  navigate("/addFurniture");
-                }}
-              >
-                POST NOW
-              </button>
-            </div>
+          <div className="flex justify-center mt-8">
+            <button
+              type="submit"
+              className="w-48 py-3 text-lg font-semibold bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            >
+              Post Now
+            </button>
           </div>
         </div>
       </form>

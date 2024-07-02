@@ -1,59 +1,83 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import EditFurnitureCard from "../Components/EditFurnitureCard";
 import Navbar from "../Components/Navbar";
 import { MdAddBusiness } from "react-icons/md";
 import TagCard from "../Components/TagCard";
-import image from "../assets/chair.jpg";
 import { useNavigate } from "react-router-dom";
-import { AppContext, Context } from "../Context/UseContext";
 
 const AddFurniture = () => {
-  const [showChildCards, setshowChildCards] = useState<boolean>(false);
+  const [showChildCards, setShowChildCards] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { username } = useContext(AppContext) as Context;
-  console.log("the value of the username in the add furniture: ", username);
 
   return (
-    <div className="flex flex-col overflow-x-hidden relative min-h-screen bg-slate-600">
+    <div className="flex flex-col overflow-x-hidden relative min-h-screen bg-gray-900 text-white">
       <Navbar />
+
+      {/* Button to navigate to /furnitureProfile */}
       <button
-        className="flex justify-center items-center top-28 left-5 bg-red-700 bg-opacity-70 text-white py-2 px-4 rounded z-50 shadow-lg fixed"
+        className="fixed top-28 left-5 z-50 flex items-center bg-red-700 bg-opacity-80 text-white py-3 px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 ease-in-out"
         onClick={() => {
           navigate("/furnitureProfile");
         }}
       >
-        <MdAddBusiness className="mr-2" /> Add Your Furniture
+        <MdAddBusiness className="mr-2 text-2xl" /> Add Your Furniture
       </button>
 
-      {showChildCards ? (
-        <div>
-          <button
-            className="flex justify-center items-center top-28 right-5 bg-red-700 bg-opacity-70 text-white py-2 px-4 rounded z-50 shadow-lg fixed"
-            onClick={() => setshowChildCards(false)}
-          >
-            <MdAddBusiness className="mr-2" /> Go Back To Tags
-          </button>
-        </div>
-      ) : null}
+      {/* Conditional button to go back to tags */}
+      {showChildCards && (
+        <button
+          className="fixed top-28 right-5 z-50 flex items-center bg-red-700 bg-opacity-80 text-white py-3 px-6 rounded-full shadow-lg hover:bg-red-600 transition duration-300 ease-in-out"
+          onClick={() => setShowChildCards(false)}
+        >
+          <MdAddBusiness className="mr-2 text-2xl" /> Go Back To Tags
+        </button>
+      )}
 
-      <div className="flex flex-col justify-center items-center mt-[5rem] w-full">
-        <div className="w-full flex flex-wrap justify-center gap-5 mb-4">
-          <div className=" min-h-screen flex justify-center items-center w-full">
+      {/* Main content */}
+      <div className="flex justify-center items-center mt-32">
+        <div className="w-full max-w-7xl px-4 md:px-5 lg:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Render TagCard components */}
             {showChildCards ? (
               <EditFurnitureCard />
             ) : (
-              <div className="h-full w-full flex justify-center items-center flex-wrap gap-4">
+              <>
                 <TagCard
                   tagName={"Chair"}
-                  picture={image}
-                  setshowChildCards={setshowChildCards}
+                  picture={
+                    "https://w0.peakpx.com/wallpaper/317/409/HD-wallpaper-blue-chair-lamp-stone-chandelier-chair-wall-old-blue.jpg"
+                  }
+                  setShowChildCards={setShowChildCards}
                 />
                 <TagCard
                   tagName={"Table"}
-                  picture={image}
-                  setshowChildCards={setshowChildCards}
+                  picture={
+                    "https://images.pexels.com/photos/2451264/pexels-photo-2451264.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=10"
+                  }
+                  setShowChildCards={setShowChildCards}
                 />
-              </div>
+                <TagCard
+                  tagName={"Window"}
+                  picture={
+                    "https://w0.peakpx.com/wallpaper/145/738/HD-wallpaper-window-view-pretty-view-window-nature.jpg"
+                  }
+                  setShowChildCards={setShowChildCards}
+                />
+                <TagCard
+                  tagName={"Sofa"}
+                  picture={
+                    "https://i.pinimg.com/564x/88/88/44/888844c0a9d50e697931fd2640a4a345.jpg"
+                  }
+                  setShowChildCards={setShowChildCards}
+                />
+                <TagCard
+                  tagName={"Bed"}
+                  picture={
+                    "https://c4.wallpaperflare.com/wallpaper/424/27/651/bedroom-bed-style-interior-wallpaper-preview.jpg"
+                  }
+                  setShowChildCards={setShowChildCards}
+                />
+              </>
             )}
           </div>
         </div>

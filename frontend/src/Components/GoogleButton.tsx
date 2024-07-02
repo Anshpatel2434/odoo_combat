@@ -19,12 +19,12 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
 
   const [user, setUser] = useState<User | undefined>(undefined);
 
-  //setting up the user in the backend
+  // Function to handle signup request
   async function sendRequest(signup: SingupInput) {
     try {
       const res = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, signup);
       const data = res.data;
-      if (data.status == 200) {
+      if (data.status === 200) {
         setLogUser({
           name: signup.name,
           email: signup.email,
@@ -32,15 +32,10 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
         localStorage.setItem("token", data.message);
         setUsername(data.name);
         setLoggedIn(true);
-        console.log("inside signup");
         navigate("/setpassword");
-      } else if (data.status == 403) {
+      } else if (data.status === 403) {
         setLoggedIn(true);
         localStorage.setItem("token", data.message);
-        console.log(
-          "in the signup but in status 403 and the username is : ",
-          data.name
-        );
         setUsername(data.name);
         setLogUser({
           name: signup.name,
@@ -53,6 +48,7 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
     }
   }
 
+  // Function to handle login request
   async function sendLoginRequest(email: string) {
     const body = {
       email: email,
@@ -63,38 +59,32 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
         body
       );
       const data = res.data;
-      if (data.status == 200) {
+      if (data.status === 200) {
         setLoggedIn(true);
         setUsername(data.name);
         setLogUser({
           email: email,
           name: data.name,
         });
-        console.log("inside login input /signingoogle");
         localStorage.setItem("token", data.message);
         navigate("/");
       } else alert(data.message);
     } catch (e) {
-      alert("Error while login in");
+      alert("Error while logging in");
     }
   }
 
-  //getting the main object after the user is logged in
+  // Google login functionality
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse: TokenResponse) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { error, error_description, error_uri, ...userWithoutErrors } =
         tokenResponse;
       setUser(userWithoutErrors as User);
-      console.log(
-        "user signed in with google but credentials yet to get",
-        userWithoutErrors
-      );
     },
     onError: (error) => console.log("Login failed: ", error),
   });
 
-  //getting the creditials of the loggined user
+  // Effect to fetch user details after successful login
   useEffect(() => {
     if (user) {
       axios
@@ -120,14 +110,15 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
         .catch((err) => console.log(err));
     }
   }, [user]);
+
   return (
     <button
       onClick={() => login()}
-      className="mt-1 w-full text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      className="w-full bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition duration-300 ease-in-out"
     >
-      <div className="flex gap-4 justify-center items-center">
-        <FcGoogle size={22}></FcGoogle>
-        <span className="text-white">{type} with Google</span>
+      <div className="flex items-center justify-center gap-2">
+        <FcGoogle size={22} className="text-white" />
+        <span>{type === "SignUp" ? "Sign Up" : "Log In"} with Google</span>
       </div>
     </button>
   );

@@ -1,98 +1,99 @@
-import { CgProfile } from "react-icons/cg";
+import { useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { CgProfile, CgNotes } from "react-icons/cg";
 import { FaUserEdit } from "react-icons/fa";
-import { CgNotes } from "react-icons/cg";
 import { RiArmchairFill } from "react-icons/ri";
 import { MdLogout } from "react-icons/md";
-import "./styles.css";
 import { AppContext, Context } from "../Context/UseContext";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-
-// interface Props {
-//   // logo: string;
-//   // userImage: string;
-//   // userName: string;
-// }
 
 const DropDown = () => {
-  const { logUser, setLoggedIn } = useContext(AppContext) as Context;
+  const { logUser, setLoggedIn, setDropdown } = useContext(
+    AppContext
+  ) as Context;
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Close dropdown when user clicks outside of it
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const closeDropdown = () => {
+    setDropdown(false);
+  };
+
+  const handleLogout = () => {
+    navigate("/");
+    setLoggedIn(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedIn");
+    window.location.reload();
+  };
 
   return (
-    <div className="hero">
-      <nav>
-        <div className="sub-menu-wrap bg-black" id="subMenu">
-          <div className="sub-menu space-y-3">
-            <div className="user-info">
-              {/* src = userImage */}
-              <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white border border-white">
-                {logUser.name[0].toUpperCase()}
-              </div>
-              {/* userName */}
-              <p className="text-white text-[1.5rem] font-semibold flex flex-wrap">
-                {logUser.name}
-              </p>
-            </div>
-            <hr />
-
-            <div
-              className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
-              onClick={() => {
-                navigate("/userInfo");
-              }}
-            >
-              <CgProfile size={30} />
-              <p>My Profile</p>
-              <span>{">"}</span>
-            </div>
-
-            <div
-              className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
-              onClick={() => {
-                navigate("/editProfile");
-              }}
-            >
-              <FaUserEdit size={30} />
-              <p>Edit Profile</p>
-              <span>{">"}</span>
-            </div>
-            <div
-              className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
-              onClick={() => {
-                navigate("/addFurniture");
-              }}
-            >
-              <RiArmchairFill size={30} />
-              <p>Rent Your Furniture</p>
-              <span>{">"}</span>
-            </div>
-            <div
-              className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              <CgNotes size={30} />
-              <p>My Orders</p>
-              <span>{">"}</span>
-            </div>
-
-            <div className="w-full h-[1px] bg-[#c0c0c0]"></div>
-
-            <div
-              className="sub-menu-link no-underline flex items-center justify-start space-x-3  text-white text-[1rem]"
-              onClick={() => {
-                navigate("/");
-                setLoggedIn(false);
-                window.location.reload();
-                localStorage.setItem("token", "");
-                localStorage.setItem("loggedIn", "" + false);
-              }}
-            >
-              <MdLogout size={30} />
-              <p className="text-red-600">Logout</p>
-            </div>
+    <div className="fixed right-1 top-20 z-50">
+      <nav
+        ref={dropdownRef}
+        className="w-72 p-4 flex flex-col items-center bg-gray-800 text-white border-2 border-white shadow-lg"
+        style={{ transition: "opacity 0.3s, transform 0.3s" }}
+        onMouseLeave={closeDropdown}
+      >
+        <div className="flex flex-col items-center">
+          <div className="w-14 h-14 rounded-full flex justify-center items-center bg-gray-800 text-white text-2xl border border-white">
+            {logUser.name[0].toUpperCase()}
           </div>
+          <p className="text-2xl font-semibold mt-2">{logUser.name}</p>
+        </div>
+        <hr className="w-full my-4 border-gray-600" />
+        <div className="flex flex-col space-y-4">
+          <button
+            className="flex items-center gap-3 w-full text-lg hover:text-gray-300"
+            onClick={() => navigate("/userInfo")}
+          >
+            <CgProfile size={30} />
+            <span>My Profile</span>
+          </button>
+          <button
+            className="flex items-center gap-3 w-full text-lg hover:text-gray-300"
+            onClick={() => navigate("/editProfile")}
+          >
+            <FaUserEdit size={30} />
+            <span>Edit Profile</span>
+          </button>
+          <button
+            className="flex items-center gap-3 w-full text-lg hover:text-gray-300"
+            onClick={() => navigate("/addFurniture")}
+          >
+            <RiArmchairFill size={30} />
+            <span>Rent Your Furniture</span>
+          </button>
+          <button
+            className="flex items-center gap-3 w-full text-lg hover:text-gray-300"
+            onClick={() => navigate("/")}
+          >
+            <CgNotes size={30} />
+            <span>My Orders</span>
+          </button>
+          <hr className="w-full border-gray-600" />
+          <button
+            className="flex items-center gap-3 w-full text-lg text-red-600 hover:text-red-400"
+            onClick={handleLogout}
+          >
+            <MdLogout size={30} />
+            <span>Logout</span>
+          </button>
         </div>
       </nav>
     </div>

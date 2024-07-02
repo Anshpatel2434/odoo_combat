@@ -1,123 +1,161 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useContext } from "react";
-import { AppContext } from "../Context/UseContext";
-import { Context } from "../Context/UseContext";
-import { useNavigate } from "react-router-dom";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { IoSearch } from "react-icons/io5";
-import { IoCartOutline } from "react-icons/io5";
+import { IoSearch, IoCartOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../Context/UseContext";
 import DropDown from "./DropDown";
+import { Context } from "../Context/UseContext";
 
 const Navbar = () => {
-  const { loggedIn, dropdown } = useContext(AppContext) as Context;
-  const [search, setSearch] = useState("");
+  const { loggedIn, dropdown, setDropdown, logUser } = useContext(
+    AppContext
+  ) as Context;
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key == "Enter") {
-      Search(search);
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      searchFurniture(search);
     }
-  }
+  };
 
-  function goToCart() {
+  const goToCart = () => {
     navigate("/cart");
-  }
+  };
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  }
+  };
 
-  function Search(value: string) {
+  const searchFurniture = (value: string) => {
     navigate(`/search/${value}`);
-  }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <div className="relative">
-      {dropdown ? <DropDown /> : null}
-      <div className="bg-white w-screen border-b-black fixed z-10 shadow-lg h-[4rem] md:h-[5rem] flex justify-between ">
+      {dropdown && <DropDown />}
+      <div className="bg-gray-900 w-full fixed top-0 z-10 shadow-lg h-16 md:h-20 flex justify-between items-center border-b border-gray-300 px-4 md:px-8">
         <div
-          className="md:border max-w-[12rem] h-full md:flex-shrink-0 flex items-center justify-center md:px-4 lg:px-6 xl:px-8"
-          onClick={() => {
-            navigate("/");
-          }}
+          className="flex items-center cursor-pointer text-gray-200"
+          onClick={() => navigate("/")}
         >
-          <span className="text-xl font-bold">FurtinureSphere</span>
+          <span className="text-xl font-bold">FurnitureSphere</span>
         </div>
-        <div className="md:hidden border w-[4rem] flex items-center justify-center">
-          <a>
-            <GiHamburgerMenu />
-          </a>
+        <div className="md:hidden flex items-center">
+          <GiHamburgerMenu
+            onClick={toggleMobileMenu}
+            size={24}
+            className="text-gray-200"
+          />
         </div>
-        <nav className=" hidden md:contents font-semibold  text-base lg:text-lg">
-          <ul className="flex items-center justify-between ml-4 xl:ml-8 w-full mr-auto">
-            <li className="p-3 xl:p-6">
-              <div className="flex items-center">
-                <input
-                  className="w-[40rem] h-[3rem] ml-[3rem] text-black  text-[1.2rem] pl-[1rem] border-2 border-black rounded-tl-lg rounded-bl-lg flex items-center bg-white"
-                  placeholder="Search Furniture"
-                  onChange={handleChange}
-                  onKeyDown={(event) => handleKey(event)}
-                />
+        <nav className="hidden md:flex flex-grow items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <input
+              className="w-full md:w-96 h-10 text-gray-200 text-lg pl-4 border-2 border-gray-600 rounded-l-lg focus:outline-none bg-gray-800"
+              placeholder="Search Furniture"
+              onChange={handleChange}
+              onKeyDown={handleKey}
+            />
+            <button
+              onClick={() => searchFurniture(search)}
+              className="bg-blue-700 h-10 w-16 flex items-center justify-center border-2 border-gray-600 rounded-r-lg"
+            >
+              <IoSearch size={24} className="text-white" />
+            </button>
+          </div>
+          <button
+            onClick={goToCart}
+            className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded flex items-center gap-2"
+          >
+            Cart <IoCartOutline size={24} className="text-white" />
+          </button>
+          <div className="flex items-center gap-4">
+            {loggedIn ? (
+              <button
+                onClick={() => setDropdown(!dropdown)}
+                className="flex items-center gap-2 text-gray-200"
+              >
+                <div className="w-14 h-14 rounded-full flex justify-center items-center bg-blue-700 text-white text-2xl">
+                  {logUser.name[0].toUpperCase()}
+                </div>
+                <TiArrowSortedDown size={24} className="text-gray-600" />
+              </button>
+            ) : (
+              <>
                 <button
-                  onClick={() => Search(search)}
-                  className="bg-black h-[3rem] w-[5rem] flex items-center border-black border-2 rounded-tr-lg rounded-br-lg justify-center"
+                  className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded"
+                  onClick={() => navigate("/login")}
                 >
-                  <IoSearch size={30} fill="white" />
+                  Login
                 </button>
-              </div>
-            </li>
-            <li className="p-3 xl:p-6 mr-10">
-              <button
-                onClick={goToCart}
-                className="bg-black gap-2 text-lg hover:bg-gray-700 text-white font-bold px-6 xl:px-8 py-2 xl:py-3 rounded flex justify-center items-center"
-              >
-                Cart
-                <IoCartOutline size={25} />
-              </button>
-            </li>
-          </ul>
+                <button
+                  className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded"
+                  onClick={() => navigate("/signup")}
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
         </nav>
-
-        <div className="border  items-center px-4 lg:px-6 hidden md:flex xl:px-8 gap-6">
-          {loggedIn ? (
-            Photo()
-          ) : (
-            <>
+      </div>
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-gray-900 w-full fixed top-16 z-10 shadow-lg">
+          <div className="flex flex-col items-center px-4 py-2 gap-4">
+            <input
+              className="w-full h-10 text-gray-200 text-lg pl-4 border-2 border-gray-600 rounded-l-lg focus:outline-none bg-gray-800"
+              placeholder="Search Furniture"
+              onChange={handleChange}
+              onKeyDown={handleKey}
+            />
+            <button
+              onClick={() => searchFurniture(search)}
+              className="bg-blue-700 h-10 w-16 flex items-center justify-center border-2 border-gray-600 rounded-r-lg"
+            >
+              <IoSearch size={24} className="text-white" />
+            </button>
+            <button
+              onClick={goToCart}
+              className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded flex items-center gap-2"
+            >
+              Cart <IoCartOutline size={24} className="text-white" />
+            </button>
+            {loggedIn ? (
               <button
-                className="bg-black text-lg hover:bg-gray-700 text-white font-bold px-6 xl:px-8 py-2 xl:py-3 rounded"
-                onClick={() => navigate("/login")}
+                onClick={() => setDropdown(!dropdown)}
+                className="flex items-center gap-2 text-gray-200"
               >
-                Login
+                <div className="w-14 h-14 rounded-full flex justify-center items-center bg-blue-700 text-white text-2xl">
+                  {logUser.name[0].toUpperCase()}
+                </div>
+                <TiArrowSortedDown size={24} className="text-gray-600" />
               </button>
-              <button
-                className="bg-black text-lg hover:bg-gray-700 text-white font-bold px-4 xl:px-6 py-2 xl:py-3 rounded"
-                onClick={() => navigate("/signup")}
-              >
-                SignUp
-              </button>
-            </>
-          )}
+            ) : (
+              <>
+                <button
+                  className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded"
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </button>
+                <button
+                  className="bg-blue-700 text-lg text-white font-bold px-4 py-2 rounded"
+                  onClick={() => navigate("/signup")}
+                >
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
-  );
-};
-
-const Photo = () => {
-  const { dropdown, setDropdown, logUser } = useContext(AppContext) as Context;
-  return (
-    <button
-      onClick={() => {
-        setDropdown(!dropdown);
-      }}
-      className="flex justify-center gap-2 items-center"
-    >
-      <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white">
-        {logUser.name[0].toUpperCase()}
-      </div>
-      <TiArrowSortedDown size={25} />
-    </button>
   );
 };
 

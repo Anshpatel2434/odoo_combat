@@ -1,16 +1,59 @@
+import React from "react";
 import Card from "./Card";
+import chairImage from "../assets/chair.jpg";
 
-const EditFurnitureCard = () => {
+const EditFurnitureCard: React.FC = () => {
   return (
-    <div className="sm:w-10/12 w-full flex flex-wrap justify-center gap-5 mb-4">
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-[300%]">
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
+      <Card
+        image={chairImage}
+        title="Chair"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante."
+        address="Odoo hackathon, Gandhinagar, Ahmedabad"
+        price={1000}
+      />
     </div>
   );
 };

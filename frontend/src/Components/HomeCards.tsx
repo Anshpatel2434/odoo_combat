@@ -1,3 +1,4 @@
+// HomeCards.jsx
 import CardHome from "./CardHome";
 
 const HomeCards = () => {
@@ -6,30 +7,20 @@ const HomeCards = () => {
     [4, 5, 6, 11],
     [7, 8, 9, 12],
   ];
+
   return (
-    <div className="mb-10">
-      <div className="bg-white pb-[4rem] ">
-        <div className="text-[3rem] text-indigo-500 ml-[1.5rem] font-semibold bg-white pl-[7.6rem] pt-[6rem] flex">
-          Renting options
-        </div>
-        <div className="ml-[9rem] w-[80rem] mt-[0.6rem]  h-1 bg-blue-700 border-2 border-blue-700"></div>
+    <div className="container mx-auto mt-10">
+      <div className="text-3xl text-gray-200 font-semibold ml-4 mb-6">
+        Renting Options
       </div>
-      <div className="flex justify-center items-center flex-col font-sans bg-white  gap-y-14">
-        {/* {data.map((items, index) => (
-          <CardHome key={index}></CardHome>
-        ))} */}
-        {data.map((items, index) => {
-          return (
-            <div
-              key={index}
-              className=" w-[92rem] flex gap-x-10 justify-center"
-            >
-              {items.map((index) => (
-                <CardHome key={index} />
-              ))}
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {data.map((items, index) => (
+          <div key={index} className="flex flex-col gap-4">
+            {items.map((id) => (
+              <CardHome key={id} />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
