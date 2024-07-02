@@ -12,7 +12,6 @@ const Navbar = () => {
     AppContext
   ) as Context;
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -26,7 +25,7 @@ const Navbar = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    console.log(e);
   };
 
   const searchFurniture = () => {
@@ -115,7 +114,7 @@ const Navbar = () => {
               onKeyDown={handleKey}
             />
             <button
-              onClick={() => searchFurniture(search)}
+              onClick={() => searchFurniture()}
               className="bg-blue-700 h-10 w-16 flex items-center justify-center border-2 border-gray-600 rounded-r-lg"
             >
               <IoSearch size={24} className="text-white" />
