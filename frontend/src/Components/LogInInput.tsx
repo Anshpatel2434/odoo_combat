@@ -47,7 +47,7 @@ const LogInInput = () => {
         <div>
           <div className="px-10">
             <div className="text-3xl font-extrabold mb-4">
-              LogIn to DallaSphere
+              LogIn to FurnitureSphere
             </div>
             <div className="text-slate-500 ml-6">
               Don't have an account?
