@@ -17,7 +17,7 @@ const Navbar = () => {
 
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      searchFurniture(search);
+      searchFurniture();
     }
   };
 
@@ -29,8 +29,8 @@ const Navbar = () => {
     setSearch(e.target.value);
   };
 
-  const searchFurniture = (value: string) => {
-    navigate(`/search/${value}`);
+  const searchFurniture = () => {
+    navigate(`/`);
   };
 
   const toggleMobileMenu = () => {
@@ -63,7 +63,7 @@ const Navbar = () => {
               onKeyDown={handleKey}
             />
             <button
-              onClick={() => searchFurniture(search)}
+              onClick={() => searchFurniture()}
               className="bg-blue-700 h-10 w-16 flex items-center justify-center border-2 border-gray-600 rounded-r-lg"
             >
               <IoSearch size={24} className="text-white" />
