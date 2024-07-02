@@ -9,35 +9,10 @@ import { IoSearch } from "react-icons/io5";
 import { IoCartOutline } from "react-icons/io5";
 import DropDown from "./DropDown";
 
-const Photo = () => {
-  const { username, dropdown, setDropdown, logUser } = useContext(
-    AppContext
-  ) as Context;
-  return (
-    <button
-      onClick={() => {
-        setDropdown(!dropdown);
-      }}
-      className="flex justify-center gap-2 items-center"
-    >
-      <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white">
-        {logUser.name[0].toUpperCase()}
-      </div>
-      <TiArrowSortedDown size={25} />
-    </button>
-  );
-};
-
 const Navbar = () => {
-  const { loggedIn, username, dropdown, setDropdown } = useContext(
-    AppContext
-  ) as Context;
+  const { loggedIn, dropdown } = useContext(AppContext) as Context;
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
-
-  const [loggedInl, setLoggedInl] = useState(() => {
-    return localStorage.getItem("loggedIn") === "true";
-  });
 
   function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key == "Enter") {
@@ -105,7 +80,7 @@ const Navbar = () => {
         </nav>
 
         <div className="border  items-center px-4 lg:px-6 hidden md:flex xl:px-8 gap-6">
-          {loggedInl ? (
+          {loggedIn ? (
             Photo()
           ) : (
             <>
@@ -126,6 +101,23 @@ const Navbar = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const Photo = () => {
+  const { dropdown, setDropdown, logUser } = useContext(AppContext) as Context;
+  return (
+    <button
+      onClick={() => {
+        setDropdown(!dropdown);
+      }}
+      className="flex justify-center gap-2 items-center"
+    >
+      <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white">
+        {logUser.name[0].toUpperCase()}
+      </div>
+      <TiArrowSortedDown size={25} />
+    </button>
   );
 };
 

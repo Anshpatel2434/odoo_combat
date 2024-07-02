@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
 
 type User = {
   name: string;
@@ -52,6 +53,8 @@ export interface Context {
   setRented: React.Dispatch<React.SetStateAction<Rented>>;
   booked: Booked;
   setBooked: React.Dispatch<React.SetStateAction<Booked>>;
+  addProfile: boolean;
+  setAddProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppContext = createContext<Context | null>(null);
@@ -59,13 +62,11 @@ export const AppContext = createContext<Context | null>(null);
 const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [addProfile, setAddProfile] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [dropdown, setDropdown] = useState<boolean>(false);
-  const [logUser, setLogUser] = useState<User>({
-    name: "",
-    email: "",
-  });
+  const [logUser, setLogUser] = useState<User>({ name: "", email: "" });
   const [profile, setProfile] = useState<Profile>({
     username: "",
     house_no: "",
@@ -95,6 +96,36 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
     price: 0,
   });
 
+  async function sendRequest() {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+    try {
+      //jwt add
+      const res = await axios.get(`${BACKEND_URL}/api/v1/user/getUser`, {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      });
+      setLogUser({
+        name: res.data.name,
+        email: res.data.email,
+      });
+      if (res.data.message !== null) {
+        setLoggedIn(true);
+      }
+    } catch (error) {
+      console.log("error in fetching the data of jwt in useContext: ");
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      sendRequest();
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -112,6 +143,8 @@ const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setRented,
         booked,
         setBooked,
+        addProfile,
+        setAddProfile,
       }}
     >
       {children}

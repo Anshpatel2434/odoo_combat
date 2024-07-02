@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 // }
 
 const DropDown = () => {
-  const { username, setLoggedIn } = useContext(AppContext) as Context;
+  const { logUser, setLoggedIn } = useContext(AppContext) as Context;
   const navigate = useNavigate();
 
   return (
@@ -26,11 +26,11 @@ const DropDown = () => {
             <div className="user-info">
               {/* src = userImage */}
               <div className="w-[3.5rem] h-[3.5rem] rounded-full flex justify-center text-2xl items-center bg-black text-white border border-white">
-                {username[0].toUpperCase()}
+                {logUser.name[0].toUpperCase()}
               </div>
               {/* userName */}
               <p className="text-white text-[1.5rem] font-semibold flex flex-wrap">
-                {username}
+                {logUser.name}
               </p>
             </div>
             <hr />

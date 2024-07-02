@@ -28,9 +28,8 @@ const LogInInput = () => {
       const data = res.data;
       if (data.status == 200) {
         console.log("in login :", res.data);
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.message);
         setLoggedIn(true);
-        localStorage.setItem("loggedIn", "" + true);
         setLogUser({
           email: postInputs.email,
           name: data.name,

@@ -6,36 +6,33 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const username: string = "yash21234";
-const house_no: string = "C-1102";
-const street: string = "Ujala Circle";
-const area: string = "Sarkhej Circle";
-const city_state: string = "Ahmedabad,Guajarat";
-const phone_num: string = "9898134321";
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const { profile, setProfile, logUser } = useContext(AppContext) as Context;
+  const { profile, setProfile, logUser, addProfile } = useContext(
+    AppContext
+  ) as Context;
   const name: string = logUser.name;
   const email: string = logUser.email;
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   async function sendRequest() {
-    console.log(
-      "in the edit profile send request method and the jwt is : ",
-      localStorage.getItem("token")
-    );
     try {
-      const res = await axios.post(
-        `${BACKEND_URL}/api/v1/profile/add`,
-        profile,
-        {
+      if (addProfile) {
+        await axios.post(`${BACKEND_URL}/api/v1/profile/add}`, profile, {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
-        }
-      );
-      console.log("res data");
-      console.log(res.data);
+        });
+        setProfile(profile);
+      } else {
+        await axios.put(`${BACKEND_URL}/api/v1/profile/update`, profile, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
+        setProfile(profile);
+      }
       navigate("/");
     } catch (e) {
       alert("Error while login in");
@@ -43,7 +40,6 @@ const EditProfile = () => {
   }
 
   function submitHandler(e: React.FormEvent<HTMLFormElement>) {
-    console.log("inside the edit profile and this is the profile", profile);
     e.preventDefault();
     sendRequest();
   }
@@ -94,7 +90,7 @@ const EditProfile = () => {
             <input
               type="text"
               className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]  "
-              placeholder={phone_num}
+              placeholder={profile.phone_num}
               onChange={(e) => {
                 setProfile({ ...profile, phone_num: e.target.value });
               }}
@@ -106,7 +102,7 @@ const EditProfile = () => {
             <input
               type="text"
               className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-              placeholder={house_no}
+              placeholder={profile.house_no}
               onChange={(e) => {
                 setProfile({ ...profile, house_no: e.target.value });
               }}
@@ -118,7 +114,7 @@ const EditProfile = () => {
             <input
               type="text"
               className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-              placeholder={street}
+              placeholder={profile.street}
               onChange={(e) => {
                 setProfile({ ...profile, street: e.target.value });
               }}
@@ -130,7 +126,7 @@ const EditProfile = () => {
             <input
               type="text"
               className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-              placeholder={area}
+              placeholder={profile.area}
               onChange={(e) => {
                 setProfile({ ...profile, area: e.target.value });
               }}
@@ -142,7 +138,7 @@ const EditProfile = () => {
             <input
               type="text"
               className="border-dimgray-400 border-[2px] w-[70%]  h-[3.4rem]"
-              placeholder={city_state}
+              placeholder={profile.city_state}
               onChange={(e) => {
                 setProfile({ ...profile, city_state: e.target.value });
               }}

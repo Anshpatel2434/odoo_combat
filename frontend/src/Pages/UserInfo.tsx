@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 const UserInfo: React.FC = () => {
   const navigate = useNavigate();
 
-  const { profile, setProfile, logUser } = useContext(AppContext) as Context;
+  const { profile, setProfile, logUser, setAddProfile } = useContext(
+    AppContext
+  ) as Context;
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   async function sendRequest() {
+    console.log(localStorage.getItem("token"));
     try {
-      console.log(localStorage.getItem("token"));
       const res = await axios.get(`${BACKEND_URL}/api/v1/profile/all`, {
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -80,6 +82,7 @@ const UserInfo: React.FC = () => {
       <br />
       <button
         onClick={() => {
+          setAddProfile(true);
           navigate("/editProfile");
         }}
       >

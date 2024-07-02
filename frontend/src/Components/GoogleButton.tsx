@@ -37,12 +37,10 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
         setUsername(data.name);
         setLoggedIn(true);
         console.log("inside signup");
-        localStorage.setItem("loggedIn", "" + true);
         navigate("/setpassword");
       } else if (data.status == 403) {
         setLoggedIn(true);
         localStorage.setItem("token", data.message);
-        localStorage.setItem("loggedIn", "" + true);
         console.log(
           "in the signup but in status 403 and the username is : ",
           data.name
@@ -77,7 +75,6 @@ const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
           name: data.name,
         });
         console.log("inside login input /signingoogle");
-        localStorage.setItem("loggedIn", "" + true);
         localStorage.setItem("token", data.message);
         navigate("/");
       } else alert(data.message);

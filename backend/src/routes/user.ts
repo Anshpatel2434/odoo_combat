@@ -9,9 +9,55 @@ export const userRouter = new Hono<{
     JWT_SECRET: string;
   };
   Variables: {
-    customerId: string;
+    userId: string;
   };
 }>();
+
+userRouter.get("/getUser", async(c, next) => {
+  const authHeader = c.req.header("authorization") || "";
+  try {
+    const user = await verify(authHeader, c.env.JWT_SECRET);
+    if (user) {
+      c.set("userId", user.id + "");
+      await next();
+    } else {
+      c.status(403);
+      return c.json({
+        message: null
+      });
+    }
+  } catch (error) {
+    return c.json({
+      message: null
+    })
+  }
+  
+}, async(c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: c.get("userId"),
+      }
+    });
+
+    if(!user) return c.json({
+      message: null
+    })
+
+    return c.json({
+      name: user.name,
+      email: user.email
+    });
+  } catch (e) {
+    return c.json({
+      message: null
+    });
+  }
+})
 
 userRouter.post("/signup", async (c) => {
   const body = await c.req.json();
@@ -23,7 +69,7 @@ userRouter.post("/signup", async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const exists = await prisma.customer.findUnique({
+    const exists = await prisma.user.findUnique({
       where: {
         email: body.email,
       },
@@ -50,7 +96,7 @@ userRouter.post("/signup", async (c) => {
   }
 
   try {
-    const customer = await prisma.customer.create({
+    const user = await prisma.user.create({
       data: {
         name: body.name,
         email: body.email,
@@ -59,7 +105,7 @@ userRouter.post("/signup", async (c) => {
     });
     const jwt = await sign(
       {
-        id: customer.id,
+        id: user.id,
       },
       c.env.JWT_SECRET
     );
@@ -67,7 +113,7 @@ userRouter.post("/signup", async (c) => {
     return c.json({
       status: 200,
       message: jwt,
-      name: customer.name,
+      name: user.name,
     });
   } catch (e) {
     console.log(e);
@@ -88,14 +134,14 @@ userRouter.post("/signin", async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const customer = await prisma.customer.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         email: body.email,
         password: body.password,
       },
     });
 
-    if (!customer) {
+    if (!user) {
       return c.json({
         status: 403,
         message: "Incorrect credentials",
@@ -104,7 +150,7 @@ userRouter.post("/signin", async (c) => {
 
     const jwt = await sign(
       {
-        id: customer.id,
+        id: user.id,
       },
       c.env.JWT_SECRET
     );
@@ -112,7 +158,7 @@ userRouter.post("/signin", async (c) => {
     return c.json({
       status: 200,
       message: jwt,
-      name: customer.name,
+      name: user.name,
     });
   } catch (e) {
     console.log(e);
@@ -133,13 +179,13 @@ userRouter.post("/signingoogle", async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const customer = await prisma.customer.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email: body.email,
       },
     });
 
-    if (!customer) {
+    if (!user) {
       return c.json({
         status: 403,
         message: "User does not exists",
@@ -148,7 +194,7 @@ userRouter.post("/signingoogle", async (c) => {
 
     const jwt = await sign(
       {
-        id: customer.id,
+        id: user.id,
       },
       c.env.JWT_SECRET
     );
@@ -157,7 +203,7 @@ userRouter.post("/signingoogle", async (c) => {
     return c.json({
       status: 200,
       message: jwt,
-      name: customer.name,
+      name: user.name,
     });
   } catch (e) {
     console.log(e);
@@ -173,9 +219,9 @@ userRouter.put(
   async (c, next) => {
     const authHeader = c.req.header("authorization") || "";
     try {
-      const customer = await verify(authHeader, c.env.JWT_SECRET);
-      if (customer) {
-        c.set("customerId", customer.id + "");
+      const user = await verify(authHeader, c.env.JWT_SECRET);
+      if (user) {
+        c.set("userId", user.id + "");
         await next();
       } else {
         c.status(403);
@@ -202,9 +248,9 @@ userRouter.put(
     }).$extends(withAccelerate());
 
     try {
-      const customer = await prisma.customer.update({
+      const user = await prisma.user.update({
         where: {
-          id: Number(c.get("customerId")),
+          id: c.get("userId"),
         },
         data: {
           password: body.password,
@@ -214,7 +260,7 @@ userRouter.put(
       c.status(200);
       return c.json({
         status: 200,
-        name: customer.name,
+        name: user.name,
       });
     } catch (e) {
       return c.json({
@@ -224,5 +270,3 @@ userRouter.put(
     }
   }
 );
-
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MX0.6bFcCtTAdwYozlEy0_wxYOGwNlgcTaIIWtRBEUCGcFU
