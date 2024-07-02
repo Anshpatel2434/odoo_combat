@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaUserEdit } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
@@ -7,6 +6,7 @@ import { MdLogout } from "react-icons/md";
 import "./styles.css";
 import { AppContext, Context } from "../Context/UseContext";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 
 // interface Props {
 //   // logo: string;

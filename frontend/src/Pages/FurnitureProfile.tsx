@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import "../styles.css";
 import Navbar from "../Components/Navbar";

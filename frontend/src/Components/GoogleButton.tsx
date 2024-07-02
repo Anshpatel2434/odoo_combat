@@ -1,8 +1,4 @@
-import {
-  useGoogleLogin,
-  TokenResponse,
-  googleLogout,
-} from "@react-oauth/google";
+import { useGoogleLogin, TokenResponse } from "@react-oauth/google";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
@@ -15,7 +11,7 @@ import { FcGoogle } from "react-icons/fc";
 type User = Omit<TokenResponse, "error" | "error_description" | "error_uri">;
 
 const GoogleButton = ({ type }: { type: "SignUp" | "Login" }) => {
-  const { loggedIn, setLoggedIn, setUsername, setLogUser } = useContext(
+  const { setLoggedIn, setUsername, setLogUser } = useContext(
     AppContext
   ) as Context;
   const navigate = useNavigate();

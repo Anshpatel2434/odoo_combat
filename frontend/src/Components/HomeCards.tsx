@@ -1,4 +1,3 @@
-import React from "react";
 import CardHome from "./CardHome";
 
 const HomeCards = () => {
@@ -25,7 +24,7 @@ const HomeCards = () => {
               key={index}
               className=" w-[92rem] flex gap-x-10 justify-center"
             >
-              {items.map((item, index) => (
+              {items.map((index) => (
                 <CardHome key={index} />
               ))}
             </div>

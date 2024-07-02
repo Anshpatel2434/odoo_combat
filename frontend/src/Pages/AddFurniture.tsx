@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import EditFurnitureCard from "../Components/EditFurnitureCard";
 import Navbar from "../Components/Navbar";
 import { MdAddBusiness } from "react-icons/md";

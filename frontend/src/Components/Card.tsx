@@ -1,4 +1,3 @@
-import React from "react";
 import image from "../assets/chair.jpg";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";

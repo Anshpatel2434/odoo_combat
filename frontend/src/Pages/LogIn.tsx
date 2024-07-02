@@ -1,4 +1,3 @@
-import React from "react";
 import LogInInput from "../Components/LogInInput";
 import Quote from "../Components/Quote";
 

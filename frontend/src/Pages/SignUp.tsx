@@ -1,4 +1,3 @@
-import React from "react";
 import SignUpInput from "../Components/SignUpInput";
 import Quote from "../Components/Quote";
 
