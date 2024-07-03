@@ -77,7 +77,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">Username</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.username}
               onChange={handleInputChange}
               name="username"
@@ -98,7 +98,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">Phone Number</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.phone_num}
               onChange={handleInputChange}
               name="phone_num"
@@ -109,7 +109,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">House No</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.house_no}
               onChange={handleInputChange}
               name="house_no"
@@ -120,7 +120,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">Street Name</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.street}
               onChange={handleInputChange}
               name="street"
@@ -131,7 +131,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">Area</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.area}
               onChange={handleInputChange}
               name="area"
@@ -142,7 +142,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <label className="text-sm font-semibold">City, State</label>
             <input
               type="text"
-              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full"
+              className="border-2 border-gray-400 rounded-lg py-2 px-4 w-full text-black"
               placeholder={profile.city_state}
               onChange={handleInputChange}
               name="city_state"

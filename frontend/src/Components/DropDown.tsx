@@ -30,6 +30,12 @@ const DropDown = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setDropdown(false);
+    }, 3000);
+  }, []);
+
   const closeDropdown = () => {
     setDropdown(false);
   };
